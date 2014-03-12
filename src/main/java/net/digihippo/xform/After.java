@@ -3,7 +3,7 @@ package net.digihippo.xform;
 import java.util.LinkedList;
 import java.util.List;
 
-final class After implements StackTransformer {
+final class After extends ComposableTransformer {
     private final Class<?> klass;
 
     After(Class<?> klass) {

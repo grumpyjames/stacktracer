@@ -1,10 +1,12 @@
 package net.digihippo;
 
+import net.digihippo.xform.StackTransformer;
 import org.junit.Test;
 
 import java.util.List;
 
-import static net.digihippo.CycleDetectors.after;
+import static net.digihippo.xform.StackTransformers.after;
+import static net.digihippo.xform.StackTransformers.excluding;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -13,35 +15,41 @@ public class CyclicCallDetectorTest {
 
     @Test
     public void should_detect_no_cycle_in_acyclic_call_path() {
-        assertAcyclic(generateRepeatedCallStackOfDepth(0));
+        assertAcyclic(after(CyclicCallDetectorTest.class), generateRepeatedCallStackOfDepth(0));
     }
 
     @Test
     public void two_recursive_calls_to_the_same_class_are_defined_as_acyclic() {
-        assertAcyclic(generateRepeatedCallStackOfDepth(1));
+        assertAcyclic(after(CyclicCallDetectorTest.class), generateRepeatedCallStackOfDepth(1));
     }
 
     @Test
     public void calls_to_private_methods_are_not_acyclic() {
-        assertAcyclic(generateStackTraceContainingPrivateMethodCall());
+        assertAcyclic(after(CyclicCallDetectorTest.class), generateStackTraceContainingPrivateMethodCall());
     }
 
     @Test
     public void corecursive_calls_are_cyclic() {
-        assertCyclic(generateCoRecursiveStack());
+        assertCyclic(after(CyclicCallDetectorTest.class), generateCoRecursiveStack());
+    }
+
+    @Test
+    public void excluding_the_cyclic_class_leaves_an_acyclic_result() {
+        assertAcyclic(after(CyclicCallDetectorTest.class).and(excluding(CoRecursiveA.class)),
+                      generateCoRecursiveStack());
     }
 
     @Test
     public void callbacks_to_anonymous_inner_classes_is_acyclic() {
-        assertAcyclic(generateCallbackStack());
+        assertAcyclic(after(CyclicCallDetectorTest.class), generateCallbackStack());
     }
 
-    private void assertAcyclic(List<StackTraceElement> elements) {
-        assertTrue(after(CyclicCallDetectorTest.class).isAcyclic(elements));
+    private void assertAcyclic(StackTransformer stackTransformer, List<StackTraceElement> elements) {
+        assertTrue(new ConfigurableCycleDetector(stackTransformer).isAcyclic(elements));
     }
 
-    private void assertCyclic(List<StackTraceElement> elements) {
-        assertFalse(after(CyclicCallDetectorTest.class).isAcyclic(elements));
+    private void assertCyclic(StackTransformer stackTransformer, List<StackTraceElement> elements) {
+        assertFalse(new ConfigurableCycleDetector(stackTransformer).isAcyclic(elements));
     }
 
     private List<StackTraceElement> generateCallbackStack() {
