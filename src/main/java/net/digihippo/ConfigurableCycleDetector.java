@@ -5,6 +5,7 @@ import net.digihippo.xform.StackTransformer;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 class ConfigurableCycleDetector implements CycleDetector {
@@ -16,14 +17,15 @@ class ConfigurableCycleDetector implements CycleDetector {
 
     @Override
     public boolean isAcyclic(StackTraceElement[] stackTrace) {
-        return acyclic(bound.apply(Arrays.asList(stackTrace)).toArray(new StackTraceElement[0]));
+        return acyclic(bound.apply(Arrays.asList(stackTrace)));
     }
 
     private interface F<A,B> {
         A f(A a, B b);
     }
 
-    public static <A, B> A fold(F<A, B> f, A initialValue, Iterable<B> bs) {
+    // Don't tell Tony Morris. He'd be very upset.
+    public static <A, B> A horribleMutableFold(F<A, B> f, A initialValue, Iterable<B> bs) {
         A context = initialValue;
         for (B b : bs) {
             context = f.f(context, b);
@@ -74,8 +76,8 @@ class ConfigurableCycleDetector implements CycleDetector {
         }
     }
 
-    private boolean acyclic(StackTraceElement[] elements) {
-        FoldContext result = fold(new FoldFn(), new FoldContext(), Arrays.asList(elements));
+    private boolean acyclic(List<StackTraceElement> elements) {
+        FoldContext result = horribleMutableFold(new FoldFn(), new FoldContext(), elements);
         return result.acyclic();
     }
 }
