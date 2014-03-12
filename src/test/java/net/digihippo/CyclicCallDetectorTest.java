@@ -5,9 +5,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static net.digihippo.xform.StackTransformers.after;
-import static net.digihippo.xform.StackTransformers.excluding;
-import static net.digihippo.xform.StackTransformers.start;
+import static net.digihippo.xform.StackTransformers.*;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -48,6 +46,12 @@ public class CyclicCallDetectorTest {
     @Test
     public void callbacks_to_anonymous_inner_classes_is_acyclic() {
         assertAcyclic(after(CyclicCallDetectorTest.class), generateCallbackStack());
+    }
+
+    @Test
+    public void terminating_stack_before_corecursion_occurs_is_acyclic() {
+        assertAcyclic(before(CoRecursiveB.class).and(after(CyclicCallDetectorTest.class)),
+                      generateCoRecursiveStack());
     }
 
     private void assertAcyclic(StackTransformer stackTransformer, List<StackTraceElement> elements) {
