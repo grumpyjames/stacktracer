@@ -1,5 +1,6 @@
 package net.digihippo.xform;
 
+import net.digihippo.JustRun;
 import net.digihippo.StackCapture;
 import org.junit.Test;
 

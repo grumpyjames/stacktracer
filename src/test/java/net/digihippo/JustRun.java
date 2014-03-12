@@ -1,9 +1,9 @@
-package net.digihippo.xform;
+package net.digihippo;
 
-class JustRun implements Runnable {
+public class JustRun implements Runnable {
     private final Runnable runnable;
 
-    JustRun(Runnable runnable) {
+    public JustRun(Runnable runnable) {
         this.runnable = runnable;
     }
 
