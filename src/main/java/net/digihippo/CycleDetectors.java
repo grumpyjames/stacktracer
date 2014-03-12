@@ -1,12 +1,12 @@
 package net.digihippo;
 
-import net.digihippo.xform.After;
+import net.digihippo.xform.StackTransformers;
 
 public final class CycleDetectors {
 
     private CycleDetectors() {}
 
     public static CycleDetector after(Class<?> klass) {
-        return new ConfigurableCycleDetector(new After(klass));
+        return new ConfigurableCycleDetector(StackTransformers.after(klass));
     }
 }

@@ -1,4 +1,4 @@
-package net.digihippo;
+package net.digihippo.xform;
 
 class JustRun {
     private final Runnable runnable;

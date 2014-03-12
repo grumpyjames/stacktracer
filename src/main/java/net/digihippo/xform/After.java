@@ -1,13 +1,12 @@
 package net.digihippo.xform;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-public class After implements StackTransformer {
+final class After implements StackTransformer {
     private final Class<?> klass;
 
-    public After(Class<?> klass) {
+    After(Class<?> klass) {
         this.klass = klass;
     }
 

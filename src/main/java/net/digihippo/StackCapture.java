@@ -3,7 +3,7 @@ package net.digihippo;
 import java.util.Arrays;
 import java.util.List;
 
-class StackCapture implements Runnable {
+public class StackCapture implements Runnable {
     private List<StackTraceElement> stackTrace;
 
     @Override
@@ -15,7 +15,7 @@ class StackCapture implements Runnable {
         stackTrace = Arrays.asList(result);
     }
 
-    List<StackTraceElement> getStackTrace() {
+    public List<StackTraceElement> getStackTrace() {
         return stackTrace;
     }
 }
