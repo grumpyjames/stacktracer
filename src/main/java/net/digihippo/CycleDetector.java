@@ -1,5 +1,7 @@
 package net.digihippo;
 
+import java.util.List;
+
 public interface CycleDetector {
-    boolean isAcyclic(StackTraceElement[] stackTrace);
+    boolean isAcyclic(List<StackTraceElement> stackTrace);
 }

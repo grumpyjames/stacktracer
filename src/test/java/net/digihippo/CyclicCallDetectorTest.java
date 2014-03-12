@@ -2,6 +2,8 @@ package net.digihippo;
 
 import org.junit.Test;
 
+import java.util.List;
+
 import static net.digihippo.CycleDetectors.after;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -34,22 +36,22 @@ public class CyclicCallDetectorTest {
         assertAcyclic(generateCallbackStack());
     }
 
-    private void assertAcyclic(StackTraceElement[] elements) {
+    private void assertAcyclic(List<StackTraceElement> elements) {
         assertTrue(after(CyclicCallDetectorTest.class).isAcyclic(elements));
     }
 
-    private void assertCyclic(StackTraceElement[] elements) {
+    private void assertCyclic(List<StackTraceElement> elements) {
         assertFalse(after(CyclicCallDetectorTest.class).isAcyclic(elements));
     }
 
-    private StackTraceElement[] generateCallbackStack() {
+    private List<StackTraceElement> generateCallbackStack() {
         final CallbackThing callbackThing = new CallbackThing(stackTraceCapturer, new RunsPassedInRunnable());
         callbackThing.run();
 
         return stackTraceCapturer.getStackTrace();
     }
 
-    private StackTraceElement[] generateCoRecursiveStack() {
+    private List<StackTraceElement> generateCoRecursiveStack() {
         final CoRecursiveA a = new CoRecursiveA(2, stackTraceCapturer);
         final CoRecursiveB b = new CoRecursiveB(2, stackTraceCapturer);
 
@@ -57,14 +59,14 @@ public class CyclicCallDetectorTest {
         return stackTraceCapturer.getStackTrace();
     }
 
-    private StackTraceElement[] generateStackTraceContainingPrivateMethodCall() {
+    private List<StackTraceElement> generateStackTraceContainingPrivateMethodCall() {
         final CallsPrivateMethodImmediately calls = new CallsPrivateMethodImmediately(stackTraceCapturer);
         calls.run();
 
         return stackTraceCapturer.getStackTrace();
     }
 
-    private StackTraceElement[] generateRepeatedCallStackOfDepth(int cycleCount) {
+    private List<StackTraceElement> generateRepeatedCallStackOfDepth(int cycleCount) {
         final NRecursiveCalls nRecursiveCalls = new NRecursiveCalls(stackTraceCapturer, cycleCount);
         nRecursiveCalls.foo();
         return stackTraceCapturer.getStackTrace();

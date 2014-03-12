@@ -1,7 +1,10 @@
 package net.digihippo;
 
+import java.util.Arrays;
+import java.util.List;
+
 class StackCapture implements Runnable {
-    private StackTraceElement[] stackTrace;
+    private List<StackTraceElement> stackTrace;
 
     @Override
     public void run() {
@@ -9,10 +12,10 @@ class StackCapture implements Runnable {
 
         final StackTraceElement[] result = new StackTraceElement[trace.length - 2];
         System.arraycopy(trace, 1, result, 0, trace.length - 2);
-        stackTrace = result;
+        stackTrace = Arrays.asList(result);
     }
 
-    StackTraceElement[] getStackTrace() {
+    List<StackTraceElement> getStackTrace() {
         return stackTrace;
     }
 }

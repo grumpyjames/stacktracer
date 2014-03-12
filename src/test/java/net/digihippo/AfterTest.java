@@ -3,7 +3,6 @@ package net.digihippo;
 import net.digihippo.xform.After;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -27,6 +26,6 @@ public class AfterTest {
         final JustRun justRun = new JustRun(stackCapture);
         justRun.run();
 
-        return Arrays.asList(stackCapture.getStackTrace());
+        return stackCapture.getStackTrace();
     }
 }

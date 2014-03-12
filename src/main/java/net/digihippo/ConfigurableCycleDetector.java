@@ -3,21 +3,20 @@ package net.digihippo;
 
 import net.digihippo.xform.StackTransformer;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 class ConfigurableCycleDetector implements CycleDetector {
-    private final StackTransformer bound;
+    private final StackTransformer transform;
 
-    public ConfigurableCycleDetector(StackTransformer bound) {
-        this.bound = bound;
+    public ConfigurableCycleDetector(StackTransformer transform) {
+        this.transform = transform;
     }
 
     @Override
-    public boolean isAcyclic(StackTraceElement[] stackTrace) {
-        return acyclic(bound.apply(Arrays.asList(stackTrace)));
+    public boolean isAcyclic(List<StackTraceElement> stackTrace) {
+        return acyclic(transform.apply(stackTrace));
     }
 
     private interface F<A,B> {
