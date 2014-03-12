@@ -7,6 +7,7 @@ import java.util.List;
 
 import static net.digihippo.xform.StackTransformers.after;
 import static net.digihippo.xform.StackTransformers.excluding;
+import static net.digihippo.xform.StackTransformers.start;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -37,6 +38,11 @@ public class CyclicCallDetectorTest {
     public void excluding_the_cyclic_class_leaves_an_acyclic_result() {
         assertAcyclic(after(CyclicCallDetectorTest.class).and(excluding(CoRecursiveA.class)),
                       generateCoRecursiveStack());
+    }
+
+    @Test
+    public void starting_at_a_suitable_point_leaves_an_acyclic_result() {
+        assertAcyclic(start(CoRecursiveB.class), generateCoRecursiveStack());
     }
 
     @Test
