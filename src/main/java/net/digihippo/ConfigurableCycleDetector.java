@@ -16,7 +16,7 @@ class ConfigurableCycleDetector implements CycleDetector {
 
     @Override
     public boolean isAcyclic(StackTraceElement[] stackTrace) {
-        return acyclic(bound.apply(stackTrace));
+        return acyclic(bound.apply(Arrays.asList(stackTrace)).toArray(new StackTraceElement[0]));
     }
 
     private interface F<A,B> {

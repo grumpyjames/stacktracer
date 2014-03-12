@@ -1,5 +1,7 @@
 package net.digihippo.xform;
 
+import java.util.List;
+
 public interface StackTransformer {
-    StackTraceElement[] apply(StackTraceElement[] stackTrace);
+    List<StackTraceElement> apply(List<StackTraceElement> stackTrace);
 }

@@ -1,6 +1,8 @@
 package net.digihippo.xform;
 
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 public class After implements StackTransformer {
     private final Class<?> klass;
@@ -10,20 +12,15 @@ public class After implements StackTransformer {
     }
 
     @Override
-    public StackTraceElement[] apply(StackTraceElement[] stackTrace) {
-        final int trimIndex = indexOfFirstOccurrence(klass, stackTrace);
-
-        return Arrays.copyOfRange(stackTrace, 0, trimIndex);
-    }
-
-    private static int indexOfFirstOccurrence(Class<?> klass, StackTraceElement[] stackTrace) {
-        for (int i = 0; i < stackTrace.length; i++) {
-            StackTraceElement stackTraceElement = stackTrace[i];
-            if (stackTraceElement.getClassName().equals(klass.getName()))
-            {
-                return i;
+    public List<StackTraceElement> apply(List<StackTraceElement> stackTrace) {
+        final List<StackTraceElement> result = new LinkedList<StackTraceElement>();
+        for (StackTraceElement stackTraceElement : stackTrace) {
+            if (stackTraceElement.getClassName().equals(klass.getName())) {
+                return result;
             }
+            result.add(stackTraceElement);
         }
-        throw new IllegalArgumentException("Limiting class " + klass + " not found in " + Arrays.toString(stackTrace));
+
+        throw new IllegalArgumentException("Limiting class " + klass + " not found in " + stackTrace);
     }
 }
