@@ -54,6 +54,12 @@ public class CyclicCallDetectorTest {
                       generateCoRecursiveStack());
     }
 
+    @Test
+    public void start_plays_well_with_before() {
+        assertAcyclic(start(CoRecursiveA.class).and(before(CoRecursiveB.class)),
+                      generateCoRecursiveStack());
+    }
+
     private void assertAcyclic(StackTransformer stackTransformer, List<StackTraceElement> elements) {
         assertTrue(new ConfigurableCycleDetector(stackTransformer).isAcyclic(elements));
     }
