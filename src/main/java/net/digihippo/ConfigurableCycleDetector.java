@@ -1,22 +1,22 @@
 package net.digihippo;
 
 
+import net.digihippo.xform.StackTransformer;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 class ConfigurableCycleDetector implements CycleDetector {
-    private final Bound bound;
-    private final Class<?> klass;
+    private final StackTransformer bound;
 
-    public ConfigurableCycleDetector(Bound bound, Class<?> klass) {
+    public ConfigurableCycleDetector(StackTransformer bound) {
         this.bound = bound;
-        this.klass = klass;
     }
 
     @Override
     public boolean isAcyclic(StackTraceElement[] stackTrace) {
-        return acyclic(bound.trim(klass, stackTrace));
+        return acyclic(bound.apply(stackTrace));
     }
 
     private interface F<A,B> {

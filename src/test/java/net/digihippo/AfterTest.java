@@ -1,16 +1,16 @@
 package net.digihippo;
 
+import net.digihippo.xform.After;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class BoundTest {
-
+public class AfterTest {
     @Test
     public void trim_all_elements_until_control_leaves_specified_class()
     {
         StackTraceElement[] stackTrace = generateStackTrace();
-        StackTraceElement[] trimmed = Bound.AFTER.trim(BoundTest.class, stackTrace);
+        StackTraceElement[] trimmed = new After(AfterTest.class).apply(stackTrace);
         assertEquals(2, trimmed.length);
     }
 
@@ -18,7 +18,7 @@ public class BoundTest {
     public void throw_if_class_bound_is_not_found()
     {
         StackTraceElement[] stackTrace = generateStackTrace();
-        Bound.AFTER.trim(Void.class, stackTrace);
+        new After(Void.class).apply(stackTrace);
     }
 
     private StackTraceElement[] generateStackTrace() {
