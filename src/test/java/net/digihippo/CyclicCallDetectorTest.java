@@ -111,6 +111,4 @@ public class CyclicCallDetectorTest {
         nRecursiveCalls.foo();
         return stackTraceCapturer.getStackTrace();
     }
-
-
 }
