@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.util.List;
 
+import static net.digihippo.CycleDetectors.cycleDetector;
 import static net.digihippo.Predicates.klass;
 import static net.digihippo.xform.StackTransformers.*;
 import static org.junit.Assert.assertFalse;
@@ -62,11 +63,11 @@ public class CyclicCallDetectorTest {
     }
 
     private void assertAcyclic(StackTransformer stackTransformer, List<StackTraceElement> elements) {
-        assertTrue(new ConfigurableCycleDetector(stackTransformer).isAcyclic(elements));
+        assertTrue(cycleDetector(stackTransformer).isAcyclic(elements));
     }
 
     private void assertCyclic(StackTransformer stackTransformer, List<StackTraceElement> elements) {
-        assertFalse(new ConfigurableCycleDetector(stackTransformer).isAcyclic(elements));
+        assertFalse(cycleDetector(stackTransformer).isAcyclic(elements));
     }
 
     private List<StackTraceElement> generateCallbackStack() {
