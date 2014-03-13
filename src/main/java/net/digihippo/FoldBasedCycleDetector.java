@@ -1,22 +1,15 @@
 package net.digihippo;
 
 
-import net.digihippo.xform.StackTransformer;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-class StackTransformingCycleDetector implements CycleDetector {
-    private final StackTransformer transform;
-
-    public StackTransformingCycleDetector(StackTransformer transform) {
-        this.transform = transform;
-    }
-
+class FoldBasedCycleDetector implements CycleDetector {
     @Override
     public boolean isAcyclic(List<StackTraceElement> stackTrace) {
-        return acyclic(transform.apply(stackTrace));
+        FoldContext result = horribleMutableFold(new FoldFn(), new FoldContext(), stackTrace);
+        return result.acyclic();
     }
 
     private interface F<A,B> {
@@ -75,8 +68,4 @@ class StackTransformingCycleDetector implements CycleDetector {
         }
     }
 
-    private boolean acyclic(List<StackTraceElement> elements) {
-        FoldContext result = horribleMutableFold(new FoldFn(), new FoldContext(), elements);
-        return result.acyclic();
-    }
 }

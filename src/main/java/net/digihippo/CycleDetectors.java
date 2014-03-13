@@ -1,10 +1,8 @@
 package net.digihippo;
 
-import net.digihippo.xform.StackTransformer;
-
 public final class CycleDetectors {
-    public static CycleDetector cycleDetector(final StackTransformer stackTransformer) {
-        return new StackTransformingCycleDetector(stackTransformer);
+    public static CycleDetector cycleDetector() {
+        return new FoldBasedCycleDetector();
     }
 
     private CycleDetectors() {}

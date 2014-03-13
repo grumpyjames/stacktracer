@@ -13,6 +13,7 @@ import static org.junit.Assert.assertTrue;
 
 public class CyclicCallDetectorTest {
     private final StackCapture stackTraceCapturer = new StackCapture();
+    private final CycleDetector cycleDetector = cycleDetector();
 
     @Test
     public void should_detect_no_cycle_in_acyclic_call_path() {
@@ -68,11 +69,11 @@ public class CyclicCallDetectorTest {
     }
 
     private void assertAcyclic(StackTransformer stackTransformer, List<StackTraceElement> elements) {
-        assertTrue(cycleDetector(stackTransformer).isAcyclic(elements));
+        assertTrue(cycleDetector.isAcyclic(stackTransformer.apply(elements)));
     }
 
     private void assertCyclic(StackTransformer stackTransformer, List<StackTraceElement> elements) {
-        assertFalse(cycleDetector(stackTransformer).isAcyclic(elements));
+        assertFalse(cycleDetector.isAcyclic(stackTransformer.apply(elements)));
     }
 
     private List<StackTraceElement> generateCallbackStack() {
