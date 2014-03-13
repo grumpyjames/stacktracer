@@ -7,10 +7,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-class ConfigurableCycleDetector implements CycleDetector {
+class StackTransformingCycleDetector implements CycleDetector {
     private final StackTransformer transform;
 
-    public ConfigurableCycleDetector(StackTransformer transform) {
+    public StackTransformingCycleDetector(StackTransformer transform) {
         this.transform = transform;
     }
 

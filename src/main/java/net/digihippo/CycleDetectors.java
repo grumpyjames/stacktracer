@@ -4,7 +4,7 @@ import net.digihippo.xform.StackTransformer;
 
 public final class CycleDetectors {
     public static CycleDetector cycleDetector(final StackTransformer stackTransformer) {
-        return new ConfigurableCycleDetector(stackTransformer);
+        return new StackTransformingCycleDetector(stackTransformer);
     }
 
     private CycleDetectors() {}
