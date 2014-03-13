@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.util.List;
 
+import static net.digihippo.Predicates.klass;
 import static net.digihippo.xform.StackTransformers.*;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -14,49 +15,49 @@ public class CyclicCallDetectorTest {
 
     @Test
     public void should_detect_no_cycle_in_acyclic_call_path() {
-        assertAcyclic(after(CyclicCallDetectorTest.class), generateRepeatedCallStackOfDepth(0));
+        assertAcyclic(after(klass(CyclicCallDetectorTest.class)), generateRepeatedCallStackOfDepth(0));
     }
 
     @Test
     public void two_recursive_calls_to_the_same_class_are_defined_as_acyclic() {
-        assertAcyclic(after(CyclicCallDetectorTest.class), generateRepeatedCallStackOfDepth(1));
+        assertAcyclic(after(klass(CyclicCallDetectorTest.class)), generateRepeatedCallStackOfDepth(1));
     }
 
     @Test
     public void calls_to_private_methods_are_not_acyclic() {
-        assertAcyclic(after(CyclicCallDetectorTest.class), generateStackTraceContainingPrivateMethodCall());
+        assertAcyclic(after(klass(CyclicCallDetectorTest.class)), generateStackTraceContainingPrivateMethodCall());
     }
 
     @Test
     public void corecursive_calls_are_cyclic() {
-        assertCyclic(after(CyclicCallDetectorTest.class), generateCoRecursiveStack());
+        assertCyclic(after(klass(CyclicCallDetectorTest.class)), generateCoRecursiveStack());
     }
 
     @Test
     public void excluding_the_cyclic_class_leaves_an_acyclic_result() {
-        assertAcyclic(after(CyclicCallDetectorTest.class).and(excluding(CoRecursiveA.class)),
+        assertAcyclic(after(klass(CyclicCallDetectorTest.class)).and(excluding(klass(CoRecursiveA.class))),
                       generateCoRecursiveStack());
     }
 
     @Test
     public void starting_at_a_suitable_point_leaves_an_acyclic_result() {
-        assertAcyclic(start(CoRecursiveB.class), generateCoRecursiveStack());
+        assertAcyclic(start(klass(CoRecursiveB.class)), generateCoRecursiveStack());
     }
 
     @Test
     public void callbacks_to_anonymous_inner_classes_is_acyclic() {
-        assertAcyclic(after(CyclicCallDetectorTest.class), generateCallbackStack());
+        assertAcyclic(after(klass(CyclicCallDetectorTest.class)), generateCallbackStack());
     }
 
     @Test
     public void terminating_stack_before_corecursion_occurs_is_acyclic() {
-        assertAcyclic(before(CoRecursiveB.class).and(after(CyclicCallDetectorTest.class)),
+        assertAcyclic(before(klass(CoRecursiveB.class)).and(after(klass(CyclicCallDetectorTest.class))),
                       generateCoRecursiveStack());
     }
 
     @Test
     public void start_plays_well_with_before() {
-        assertAcyclic(start(CoRecursiveA.class).and(before(CoRecursiveB.class)),
+        assertAcyclic(start(klass(CoRecursiveA.class)).and(before(klass(CoRecursiveB.class))),
                       generateCoRecursiveStack());
     }
 

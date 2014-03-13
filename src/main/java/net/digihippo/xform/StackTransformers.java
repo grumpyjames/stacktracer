@@ -1,8 +1,10 @@
 package net.digihippo.xform;
 
+import net.digihippo.Predicate;
+
 public class StackTransformers {
-    public static StackTransformer before(final Class<?> klass) { return new Before(klass); }
-    public static StackTransformer after(final Class<?> klass) { return new After(klass); }
-    public static StackTransformer excluding(final Class<?> klass) { return new Excluding(klass); }
-    public static StackTransformer start(final Class<?> klass) { return new Start(klass); }
+    public static StackTransformer before(Predicate predicate) { return new Before(predicate); }
+    public static StackTransformer after(Predicate predicate) { return new After(predicate); }
+    public static StackTransformer excluding(Predicate predicate) { return new Excluding(predicate); }
+    public static StackTransformer start(Predicate predicate) { return new Start(predicate); }
 }

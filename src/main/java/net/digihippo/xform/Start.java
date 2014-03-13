@@ -1,14 +1,16 @@
 package net.digihippo.xform;
 
+import net.digihippo.Predicate;
+
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 final class Start extends ComposableTransformer {
-    private final Class<?> klass;
+    private final Predicate predicate;
 
-    public Start(Class<?> klass) {
-        this.klass = klass;
+    public Start(Predicate predicate) {
+        this.predicate = predicate;
     }
 
     @Override
@@ -25,12 +27,12 @@ final class Start extends ComposableTransformer {
     private int elementsToCopy(StackTraceElement[] elements) {
         for (int i = elements.length - 1; i >= 0; --i) {
             final StackTraceElement element = elements[i];
-            if (element.getClassName().equals(klass.getName())) {
+            if (predicate.matches(element)) {
                 return i + 1;
             }
         }
 
-        throw new IllegalArgumentException("No element featuring class " + klass + " found in trace "
+        throw new IllegalArgumentException("Element " + predicate.description() + " not found in trace "
                                            + Arrays.toString(elements));
     }
 }
