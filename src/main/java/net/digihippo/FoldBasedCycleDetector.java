@@ -8,8 +8,12 @@ import java.util.Set;
 class FoldBasedCycleDetector implements CycleDetector {
     @Override
     public boolean isAcyclic(List<StackTraceElement> stackTrace) {
-        FoldContext result = horribleMutableFold(new FoldFn(), new FoldContext(), stackTrace);
-        return result.acyclic();
+        return scanForCycles(stackTrace).isAcyclic();
+    }
+
+    @Override
+    public CycleReport scanForCycles(List<StackTraceElement> stackTrace) {
+        return horribleMutableFold(new FoldFn(), new FoldContext(), stackTrace).report();
     }
 
     private interface F<A,B> {
@@ -26,38 +30,40 @@ class FoldBasedCycleDetector implements CycleDetector {
     }
 
     private static final class FoldContext {
+        // oh for a functional Set :-(
         private final Set<String> classesSeen;
+        private final Set<String> cycleClasses;
         private final String currentClass;
-        private final int cycleCount;
 
         private FoldContext() {
             classesSeen = new HashSet<String>();
             currentClass = null;
-            cycleCount = 0;
+            cycleClasses = new HashSet<String>();
         }
 
-        public FoldContext(Set<String> classesSeen, String className, int cycleCount) {
+        public FoldContext(Set<String> classesSeen, String className, Set<String> cycleClasses) {
             this.classesSeen = classesSeen;
             this.currentClass = className;
-            this.cycleCount = cycleCount;
+            this.cycleClasses = cycleClasses;
         }
 
         public FoldContext process(StackTraceElement stackTraceElement) {
             if (currentClass == null) {
-                return new FoldContext(classesSeen, stackTraceElement.getClassName(), cycleCount);
+                return new FoldContext(classesSeen, stackTraceElement.getClassName(), cycleClasses);
             } else if (stackTraceElement.getClassName().equals(currentClass)) {
                 return this;
             } else {
                 if (classesSeen.add(currentClass)) {
-                    return new FoldContext(classesSeen, stackTraceElement.getClassName(), cycleCount);
+                    return this;
                 } else {
-                    return new FoldContext(classesSeen, stackTraceElement.getClassName(), cycleCount + 1);
+                    cycleClasses.add(currentClass);
+                    return this;
                 }
             }
         }
 
-        public boolean acyclic() {
-            return cycleCount == 0 && !classesSeen.contains(currentClass);
+        public CycleReport report() {
+            return new CycleReport(cycleClasses);
         }
     }
 
