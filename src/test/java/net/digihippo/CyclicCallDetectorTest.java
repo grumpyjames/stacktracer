@@ -10,6 +10,7 @@ import static net.digihippo.predicate.Predicates.klass;
 import static net.digihippo.xform.StackTransformers.*;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class CyclicCallDetectorTest {
     private final StackCapture stackTraceCapturer = new StackCapture();
@@ -68,6 +69,27 @@ public class CyclicCallDetectorTest {
         assertCyclic(start(klass(JustRun.class)), generateOkStackWithCycleAtTheEnd());
     }
 
+    @Test
+    public void cycle_report_contains_all_cyclic_classes() {
+        final List<StackTraceElement> elements = generateDoublyCoRecursiveStack();
+        assertReportContains(cycleDetector.scanForCycles(elements), CoRecursiveA.class, CoRecursiveB.class);
+    }
+
+    private void assertReportContains(CycleReport cycleReport, Class<?>... klasses) {
+        for (Class<?> klass : klasses) {
+            boolean found = false;
+            for (String klassName : cycleReport.classNamesThatCycled()) {
+                if (klassName.equals(klass.getName())) {
+                    found = true;
+                }
+            }
+            if (!found) {
+                fail("Class " + klass + " not found in " + cycleReport.classNamesThatCycled());
+            }
+        }
+    }
+
+
     private void assertAcyclic(StackTransformer stackTransformer, List<StackTraceElement> elements) {
         assertTrue(cycleDetector.isAcyclic(stackTransformer.apply(elements)));
     }
@@ -88,6 +110,14 @@ public class CyclicCallDetectorTest {
         final CoRecursiveB b = new CoRecursiveB(2, stackTraceCapturer);
         new JustRun(new RunCoRecursive(0, a, b)).run();
 
+        return stackTraceCapturer.getStackTrace();
+    }
+
+    private List<StackTraceElement> generateDoublyCoRecursiveStack() {
+        final CoRecursiveA a = new CoRecursiveA(3, stackTraceCapturer);
+        final CoRecursiveB b = new CoRecursiveB(3, stackTraceCapturer);
+
+        a.run(0, b);
         return stackTraceCapturer.getStackTrace();
     }
 

@@ -54,15 +54,16 @@ class FoldBasedCycleDetector implements CycleDetector {
                 return this;
             } else {
                 if (classesSeen.add(currentClass)) {
-                    return this;
+                    return new FoldContext(classesSeen, stackTraceElement.getClassName(), cycleClasses);
                 } else {
                     cycleClasses.add(currentClass);
-                    return this;
+                    return new FoldContext(classesSeen, stackTraceElement.getClassName(), cycleClasses);
                 }
             }
         }
 
         public CycleReport report() {
+            if (!classesSeen.add(currentClass)) cycleClasses.add(currentClass);
             return new CycleReport(cycleClasses);
         }
     }
