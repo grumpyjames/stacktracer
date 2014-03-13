@@ -1,6 +1,6 @@
 package net.digihippo;
 
-public class ClassPredicate implements Predicate {
+class ClassPredicate implements Predicate {
     private final Class<?> klass;
 
     public ClassPredicate(Class<?> klass) {
