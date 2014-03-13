@@ -62,6 +62,11 @@ public class CyclicCallDetectorTest {
                       generateCoRecursiveStack());
     }
 
+    @Test
+    public void cycle_after_a_while_without_cycle_is_cyclic() {
+        assertCyclic(start(klass(JustRun.class)), generateOkStackWithCycleAtTheEnd());
+    }
+
     private void assertAcyclic(StackTransformer stackTransformer, List<StackTraceElement> elements) {
         assertTrue(cycleDetector(stackTransformer).isAcyclic(elements));
     }
@@ -73,6 +78,14 @@ public class CyclicCallDetectorTest {
     private List<StackTraceElement> generateCallbackStack() {
         final CallbackThing callbackThing = new CallbackThing(stackTraceCapturer, new RunsPassedInRunnable());
         callbackThing.run();
+
+        return stackTraceCapturer.getStackTrace();
+    }
+
+    private List<StackTraceElement> generateOkStackWithCycleAtTheEnd() {
+        final CoRecursiveA a = new CoRecursiveA(2, stackTraceCapturer);
+        final CoRecursiveB b = new CoRecursiveB(2, stackTraceCapturer);
+        new JustRun(new RunCoRecursive(0, a, b)).run();
 
         return stackTraceCapturer.getStackTrace();
     }

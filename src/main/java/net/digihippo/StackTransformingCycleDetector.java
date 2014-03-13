@@ -51,14 +51,14 @@ class StackTransformingCycleDetector implements CycleDetector {
 
         public FoldContext process(StackTraceElement stackTraceElement) {
             if (currentClass == null) {
-                return new FoldContext(classesSeen, stackTraceElement.getClassName(), 0);
+                return new FoldContext(classesSeen, stackTraceElement.getClassName(), cycleCount);
             } else if (stackTraceElement.getClassName().equals(currentClass)) {
                 return this;
             } else {
                 if (classesSeen.add(currentClass)) {
-                    return new FoldContext(classesSeen, stackTraceElement.getClassName(), 0);
+                    return new FoldContext(classesSeen, stackTraceElement.getClassName(), cycleCount);
                 } else {
-                    return new FoldContext(classesSeen, stackTraceElement.getClassName(), 1);
+                    return new FoldContext(classesSeen, stackTraceElement.getClassName(), cycleCount + 1);
                 }
             }
         }
