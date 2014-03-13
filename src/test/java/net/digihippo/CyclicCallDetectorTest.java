@@ -6,7 +6,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static net.digihippo.CycleDetectors.cycleDetector;
-import static net.digihippo.Predicates.klass;
+import static net.digihippo.predicate.Predicates.klass;
 import static net.digihippo.xform.StackTransformers.*;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

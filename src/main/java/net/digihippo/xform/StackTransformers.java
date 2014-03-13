@@ -1,6 +1,6 @@
 package net.digihippo.xform;
 
-import net.digihippo.Predicate;
+import net.digihippo.predicate.Predicate;
 
 public class StackTransformers {
     public static StackTransformer before(Predicate predicate) { return new Before(predicate); }

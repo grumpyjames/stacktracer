@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static net.digihippo.Predicates.klass;
+import static net.digihippo.predicate.Predicates.klass;
 import static net.digihippo.xform.StackTransformers.after;
 import static org.junit.Assert.assertEquals;
 

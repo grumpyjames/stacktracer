@@ -1,6 +1,6 @@
 package net.digihippo.xform;
 
-import net.digihippo.Predicate;
+import net.digihippo.predicate.Predicate;
 
 import java.util.Arrays;
 import java.util.LinkedList;

@@ -1,4 +1,4 @@
-package net.digihippo;
+package net.digihippo.predicate;
 
 class ClassPredicate implements Predicate {
     private final Class<?> klass;

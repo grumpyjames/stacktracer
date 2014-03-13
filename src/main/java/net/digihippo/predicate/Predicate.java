@@ -1,4 +1,4 @@
-package net.digihippo;
+package net.digihippo.predicate;
 
 public interface Predicate {
     boolean matches(StackTraceElement stackTraceElement);

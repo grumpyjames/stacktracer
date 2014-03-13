@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static net.digihippo.Predicates.klass;
+import static net.digihippo.predicate.Predicates.klass;
 import static net.digihippo.xform.StackTransformers.excluding;
 import static org.junit.Assert.fail;
 
