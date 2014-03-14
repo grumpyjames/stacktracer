@@ -16,7 +16,7 @@ Thus: Stacktracer - a library for analysing Java stack traces for circular call 
 Capture a stack:
 
 <pre>
-final List<StackTraceElement> stackTrace = StackTrace.getStackTrace();
+final List&lt;StackTraceElement&gt; stackTrace = StackTrace.getStackTrace();
 </pre>
 
 Transform it to include just the elements you like:
@@ -24,7 +24,7 @@ Transform it to include just the elements you like:
 <pre>
 final StackTransformer transformer = 
     after(klass(TestFramework.class)).and(before(PublisherProxy.class))
-final List<StackTraceElement> transformed = transformer.apply(stackTrace);
+final List&lt;StackTraceElement&gt; transformed = transformer.apply(stackTrace);
 </pre>
 
 Scan a stack trace for cycles:
