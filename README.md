@@ -16,21 +16,22 @@ Thus: Stacktracer - a library for analysing Java stack traces for circular call 
 Capture a stack:
 
 <pre>
-    final List<StackTraceElement> stackTrace = StackTrace.getStackTrace();
+final List<StackTraceElement> stackTrace = StackTrace.getStackTrace();
 </pre>
 
 Transform it to include just the elements you like:
 
 <pre>
-    final List<StackTraceElement> transformed = 
-        after(klass(TestFramework.class)).and(before(ApplicationPublisher.class)).apply(stackTrace);
+final StackTransformer transformer = 
+    after(klass(TestFramework.class)).and(before(PublisherProxy.class))
+final List<StackTraceElement> transformed = transformer.apply(stackTrace);
 </pre>
 
 Scan a stack trace for cycles:
 
 <pre>
-    final CycleReport report = CycleDetectors.scanForCycles(transformed);
-    for (final String klassName: report.classNamesThatCycled()) {
-        System.out.println("Found a cycle that visits " + klassName + " at least twice!");
-    }
+final CycleReport report = CycleDetectors.scanForCycles(transformed);
+for (final String klassName: report.classNamesThatCycled()) {
+    System.out.println("Found a cycle that visits " + klassName + " at least twice!");
+}
 </pre>
