@@ -5,16 +5,13 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static net.digihippo.CycleDetectors.cycleDetector;
+import static net.digihippo.CycleDetectors.scanForCycles;
 import static net.digihippo.predicate.Predicates.klass;
 import static net.digihippo.xform.StackTransformers.*;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 public class CyclicCallDetectorTest {
     private final StackCapture stackTraceCapturer = new StackCapture();
-    private final CycleDetector cycleDetector = cycleDetector();
 
     @Test
     public void should_detect_no_cycle_in_acyclic_call_path() {
@@ -72,7 +69,7 @@ public class CyclicCallDetectorTest {
     @Test
     public void cycle_report_contains_all_cyclic_classes() {
         final List<StackTraceElement> elements = generateDoublyCoRecursiveStack();
-        assertReportContains(cycleDetector.scanForCycles(elements), CoRecursiveA.class, CoRecursiveB.class);
+        assertReportContains(scanForCycles(elements), CoRecursiveA.class, CoRecursiveB.class);
     }
 
     private void assertReportContains(CycleReport cycleReport, Class<?>... klasses) {
@@ -89,13 +86,12 @@ public class CyclicCallDetectorTest {
         }
     }
 
-
     private void assertAcyclic(StackTransformer stackTransformer, List<StackTraceElement> elements) {
-        assertTrue(cycleDetector.isAcyclic(stackTransformer.apply(elements)));
+        assertTrue(scanForCycles(stackTransformer.apply(elements)).isAcyclic());
     }
 
     private void assertCyclic(StackTransformer stackTransformer, List<StackTraceElement> elements) {
-        assertFalse(cycleDetector.isAcyclic(stackTransformer.apply(elements)));
+        assertFalse(scanForCycles(stackTransformer.apply(elements)).isAcyclic());
     }
 
     private List<StackTraceElement> generateCallbackStack() {

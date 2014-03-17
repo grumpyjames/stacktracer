@@ -5,14 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-class FoldBasedCycleDetector implements CycleDetector {
-    @Override
-    public boolean isAcyclic(List<StackTraceElement> stackTrace) {
-        return scanForCycles(stackTrace).isAcyclic();
-    }
-
-    @Override
-    public CycleReport scanForCycles(List<StackTraceElement> stackTrace) {
+final class FoldBasedCycleDetector {
+    static CycleReport scanForCycles(List<StackTraceElement> stackTrace) {
         return horribleMutableFold(new FoldFn(), new FoldContext(), stackTrace).report();
     }
 
@@ -21,7 +15,7 @@ class FoldBasedCycleDetector implements CycleDetector {
     }
 
     // Don't tell Tony Morris. He'd be very upset.
-    public static <A, B> A horribleMutableFold(F<A, B> f, A initialValue, Iterable<B> bs) {
+    private static <A, B> A horribleMutableFold(F<A, B> f, A initialValue, Iterable<B> bs) {
         A context = initialValue;
         for (B b : bs) {
             context = f.f(context, b);
@@ -75,4 +69,5 @@ class FoldBasedCycleDetector implements CycleDetector {
         }
     }
 
+    private FoldBasedCycleDetector() {}
 }

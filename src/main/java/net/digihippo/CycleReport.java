@@ -3,7 +3,7 @@ package net.digihippo;
 import java.util.Iterator;
 import java.util.Set;
 
-public class CycleReport {
+public final class CycleReport {
     private final Set<String> classNamesThatCycled;
 
     public CycleReport(Set<String> classNamesThatCycled) {

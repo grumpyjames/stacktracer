@@ -5,7 +5,7 @@ import net.digihippo.predicate.Predicate;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Before extends ComposableTransformer {
+class Before extends ComposableTransformer {
     private final Predicate predicate;
 
     public Before(Predicate predicate) {
